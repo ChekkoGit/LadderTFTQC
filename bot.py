@@ -2,9 +2,8 @@ import discord
 from discord.ext import tasks
 import json
 import time
-import asyncio
 
-from leaderboard import *
+from set19 import *
 
 config = json.load(open("./config/config.json"))
 
@@ -23,16 +22,12 @@ async def on_ready():
     cronLeaderboard.start()
     print(f"{time.strftime('%Y-%m-%d %H:%M:%S')} - Connected on {client.user}")
 
-@tasks.loop(hours=3)
+@tasks.loop(hours=4)
 async def cronLeaderboard():
-    print(f"{time.strftime('%Y-%m-%d %H:%M:%S')} - cronLeaderboard start")
+    print(f"{time.strftime('%Y-%m-%d %H:%M:%S')} - leaderboard start")
     channel = client.get_channel(config["channelId"])
 
-    profiles = await asyncio.to_thread(getProfiles)
-    await channel.send(f"```fix\n{time.strftime('%Y-%m-%d %H:%M:%S')} - {getRankLeaderboard(profiles)}```")
-    await channel.send(f"```fix\n{time.strftime('%Y-%m-%d %H:%M:%S')} - {getThreeStarsLeaderboard(profiles)}```")
-    await channel.send(f"```fix\n{time.strftime('%Y-%m-%d %H:%M:%S')} - {getTagLeaderboard(profiles)}```")
-    await channel.send(f"```fix\n{time.strftime('%Y-%m-%d %H:%M:%S')} - {getFishedLeaderboard(profiles)}```")
+    await channel.send(f"```fix\n{time.strftime('%Y-%m-%d %H:%M:%S')}\n{getLeaderboard()}```")
 
     print(f"{time.strftime('%Y-%m-%d %H:%M:%S')} update sent.")
 
