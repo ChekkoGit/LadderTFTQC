@@ -1,6 +1,13 @@
 from api import Api
 import json
 
+def getRules():
+    output = "---\nSources de tickets:\n"
+    output += "---\nRank:\n1 ticket par tier.\n(Ex: Iron = 1, Gold = 4, Emerald = 6, etc.)\n"
+    output += "---\nReferal:\n1 ticket par referral, au maximum de 3 tickets.\nLe referal se fait à l'inscription dans le champ correspondant du formulaire.\n"
+    output += "---\nTag:\nChanger votre tag (#) pour mettre \"TFTQC\" vous accorde 2 tickets supplémentaires!\n(Ex: DavidAce#TFTQC au lieu de DavidAce#NA1)\nMerci de contacter Chekko si vous changez votre nom APRÈS votre inscription.\n---"
+    return output
+
 def getTicketsFromRank(tier):
     match tier:
         case "CHALLENGER":
@@ -46,14 +53,14 @@ def getLeaderboard():
             else: 
                 rank = f'{profile['tier']} {profile['rank']} {profile['leaguePoints']} LP'
 
-            tickets = getTicketsFromRank(profile['tier']) + player['referals']
+            tickets = getTicketsFromRank(profile['tier']) + player['referrals']
             if(player['tag'].lower() == 'tftqc'):
                 tickets+=2
 
             leaderboard.append({
-                "name": f'{player['name']}#{player['tag']}',
-                "rank": rank,
-                "referals": player['referals'],
+                "name": f'{player['name']}#{player['tag']}'.ljust(20),
+                "rank": rank.ljust(18),
+                "referrals": player['referrals'],
                 "tickets": tickets
             })
 
@@ -63,5 +70,6 @@ def getLeaderboard():
     leaderboard.sort(key=lambda i: i['tickets'], reverse=True)
     output = ""
     for player in leaderboard:
-        output+= f'{player['name']} - {player['rank']} - {player['referals']} referals - {player['tickets']} tickets\n'
+        tickets = f'{player['tickets']} tickets'.ljust(12)
+        output+= f'{player['name']} - {player['rank']} - {player['referrals']} referrals - {tickets}\n'
     return output

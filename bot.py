@@ -27,6 +27,7 @@ async def cronLeaderboard():
     print(f"{time.strftime('%Y-%m-%d %H:%M:%S')} - leaderboard start")
     channel = client.get_channel(config["channelId"])
 
+    await channel.send(f"```fix\n{getRules()}```")
     await channel.send(f"```fix\n{time.strftime('%Y-%m-%d %H:%M:%S')}\n{getLeaderboard()}```")
 
     print(f"{time.strftime('%Y-%m-%d %H:%M:%S')} update sent.")
