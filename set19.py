@@ -41,7 +41,12 @@ def getLeaderboard():
         try:
             # Profile
             puuid = api.getSummonerPuuid(name=player['name'],tag=player['tag'])
-            profile = api.getTFTLeague(puuid=puuid)[0]
+            profile = api.getTFTLeague(puuid=puuid)
+            for p in profile:
+                if p['queueType'] == "RANKED_TFT":
+                    profile = p
+
+            print(f"profile\n {profile}")
 
             # Games played
             if(profile['wins'] + profile['losses'] < 10):
